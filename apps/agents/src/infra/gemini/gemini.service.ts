@@ -29,7 +29,7 @@ export class GeminiService implements OnModuleInit {
     return text
   }
 
-  async generateEmbeddings(text: string): Promise<number[]> {
+  async generateEmbeddings(text: string): Promise<any> {
     const { embeddings } = await this.gemini.models.embedContent({
       model: 'text-embedding-004',
       contents: [{ text }],
@@ -41,7 +41,7 @@ export class GeminiService implements OnModuleInit {
     if (!embeddings?.[0].values) {
       throw new Error('Não foi possível gerar os embeddings.')
     }
-
+    const [{ values }] = embeddings
     return embeddings[0].values
   }
 

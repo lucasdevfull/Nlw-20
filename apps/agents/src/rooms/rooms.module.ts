@@ -4,9 +4,10 @@ import { RoomsRepository } from './repositories/rooms.repository'
 import { RoomsService } from './services/rooms.service'
 import { QuestionsService } from './services/questions.service'
 import { QuestionsRepository } from './repositories/questions.repository'
+import { GeminiModule } from 'src/infra/gemini/gemini.module'
 
 @Module({
-  imports: [],
+  imports: [GeminiModule],
   controllers: [RoomsController],
   providers: [
     RoomsRepository,
