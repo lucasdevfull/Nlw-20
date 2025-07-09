@@ -15,9 +15,10 @@ export class RoomsRepository {
         roomId: rooms.roomId,
         name: rooms.name,
         questionsCount: count(questions.questionId),
+        createdAt: rooms.createdAt,
       })
       .from(rooms)
-      .leftJoin(rooms, eq(questions.roomId, rooms.roomId))
+      .leftJoin(questions, eq(questions.roomId, rooms.roomId))
       .groupBy(rooms.roomId, rooms.name)
       .orderBy(rooms.createdAt)
     return result

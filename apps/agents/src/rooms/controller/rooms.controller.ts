@@ -44,7 +44,10 @@ export class RoomsController {
     @Param('roomId') roomId: string,
     @Body() body: CreateQuestionDto
   ) {
-    const data = await this.questionsService.createQuestion({ ...body, roomId })
-    return { status: HttpStatus.CREATED, data }
+    const { questionId } = await this.questionsService.createQuestion({
+      ...body,
+      roomId,
+    })
+    return { status: HttpStatus.CREATED, data: { questionId } }
   }
 }

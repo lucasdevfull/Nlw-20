@@ -13,6 +13,7 @@ async function bootstrap() {
       logger: true,
     })
   )
+  app.setGlobalPrefix('api')
   app.enableCors()
   await app.listen(env.PORT ?? 3000)
 }

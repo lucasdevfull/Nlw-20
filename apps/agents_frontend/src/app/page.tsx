@@ -1,32 +1,15 @@
-'use client';
-import { http } from "@common/client";
-import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
-
-type GetRooms = Array<{
-	roomId: string;
-	name: string;
-}>
-
-async function getRooms() {
-	const data = await http.get<GetRooms>('/rooms');
-	return data
-}
+import { CreateRoomForm } from "@/components/room-form";
+import { RoomList } from "@/components/room-list";
 
 export default function CreateRoom() {
-	const { data, isLoading } = useQuery({
-		queryKey: ['get-rooms'],
-		queryFn: getRooms
-	})
 	return (
-	<div>
-		<div>CreateRoom</div>
-
-		{isLoading && <p>Carregando...</p>}
-
-		{data?.map(room => {
-			return <Link href={`/room/${room.roomId}`} key={room.roomId}>{room.name}</Link>
-		})}
-	</div>
-	)
+		<div className="min-h-screen p-4">
+			<div className="mx-auto max-w-4xl">
+				<div className="grid grid-cols-2 items-start gap-8">
+					<CreateRoomForm />
+					<RoomList />
+				</div>
+			</div>
+		</div>
+	);
 }
