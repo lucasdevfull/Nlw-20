@@ -45,7 +45,10 @@ export class GeminiService implements OnModuleInit {
     return embeddings[0].values
   }
 
-  async generateAnswer(question: string, transcriptions: string[]): Promise<string> {
+  async generateAnswer(
+    question: string,
+    transcriptions: string[]
+  ): Promise<string> {
     const context = transcriptions.join('\n\n')
 
     const prompt = `
