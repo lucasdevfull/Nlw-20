@@ -3,8 +3,10 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import { env } from './env'
+import { patchNestJsSwagger } from 'nestjs-zod'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,8 +15,17 @@ async function bootstrap() {
       logger: true,
     })
   )
+  patchNestJsSwagger()
+  const config = new DocumentBuilder()
+    .setTitle('Agents API')
+    .setDescription('The agents API description')
+    .setVersion('1.0')
+    .build()
+  const document = () => SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, document)
   app.setGlobalPrefix('api')
   app.enableCors()
+
   await app.listen(env.PORT ?? 3000)
 }
 bootstrap()
