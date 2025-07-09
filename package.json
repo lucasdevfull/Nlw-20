@@ -1,0 +1,17 @@
+{
+  "name": "agents",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev:api": "pnpm --filter agents start:dev",
+    "dev:web": "pnpm --filter agents_frontend dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  },
+    "workspaces": [
+    "apps/*"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
