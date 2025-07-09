@@ -7,38 +7,30 @@ export class GeminiService implements OnModuleInit {
   private gemini: GoogleGenAI
   private model: string = 'gemini-2.5-flash'
   onModuleInit() {
-    const genAI = new GoogleGenAI({
+    this.gemini = new GoogleGenAI({
       apiKey: env.GEMINI_API_KEY,
     })
-    this.gemini = genAI
   }
 
-  async transcribeAudio(
-    audioAsBase64: string,
-    mimeType: string
-  ): Promise<string> {
-    const response = await this.gemini.models.generateContent({
+  async transcribeAudio(data: string, mimeType: string): Promise<string> {
+    const { text } = await this.gemini.models.generateContent({
       model: this.model,
       contents: [
         {
           text: 'Transcreva o áudio para português do Brasil. Seja preciso e natural na transcrição. Mantenha a pontuação adequada e divida o texto em parágrafos quando for apropriado.',
         },
-        {
-          inlineData: {
-            mimeType,
-            data: audioAsBase64,
-          },
-        },
+        { inlineData: { mimeType, data } },
       ],
     })
-    if (!response.text) {
+
+    if (!text) {
       throw new Error('Não foi possível converter o áudio')
     }
-    return response.text
+    return text
   }
 
-  async generateEmbeddings(text: string) {
-    const response = await this.gemini.models.embedContent({
+  async generateEmbeddings(text: string): Promise<number[]> {
+    const { embeddings } = await this.gemini.models.embedContent({
       model: 'text-embedding-004',
       contents: [{ text }],
       config: {
@@ -46,20 +38,17 @@ export class GeminiService implements OnModuleInit {
       },
     })
 
-    if (!response.embeddings?.[0].values) {
+    if (!embeddings?.[0].values) {
       throw new Error('Não foi possível gerar os embeddings.')
     }
 
-    return response.embeddings[0].values
+    return embeddings[0].values
   }
 
-  async generateAnswer(
-  question: string,
-  transcriptions: string[]
-) {
-  const context = transcriptions.join('\n\n')
+  async generateAnswer(question: string, transcriptions: string[]): Promise<string> {
+    const context = transcriptions.join('\n\n')
 
-  const prompt = `
+    const prompt = `
     Com base no texto fornecido abaixo como contexto, responda a pergunta de forma clara e precisa em português do Brasil.
   
     CONTEXTO:
@@ -77,19 +66,15 @@ export class GeminiService implements OnModuleInit {
     - Se for citar o contexto, utilize o temo "conteúdo da aula";
   `.trim()
 
-  const response = await this.gemini.models.generateContent({
-    model: this.model,
-    contents: [
-      {
-        text: prompt,
-      },
-    ],
-  })
+    const { text } = await this.gemini.models.generateContent({
+      model: this.model,
+      contents: [{ text: prompt }],
+    })
 
-  if (!response.text) {
-    throw new Error('Falha ao gerar resposta pelo Gemini')
+    if (!text) {
+      throw new Error('Falha ao gerar resposta pelo Gemini')
+    }
+
+    return text
   }
-
-  return response.text
-}
 }
