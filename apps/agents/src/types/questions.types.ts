@@ -3,6 +3,7 @@ import { ApiResponse } from './base'
 export type CreateQuestion = {
   question: string
   roomId: string
+  answer?: string | null
 }
 
 export type CreateQuestionResponse = ApiResponse<{

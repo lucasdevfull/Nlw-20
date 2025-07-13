@@ -2,7 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { createRoom } from "@/hooks/rooms";
-import type { CreateRoomFormData } from "@/types/rooms";
+import type { CreateRoomRequest } from "@/types/rooms";
 import { createRoomSchema } from "../../schema/room";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -19,16 +19,16 @@ import { Textarea } from "./ui/textarea";
 
 export function CreateRoomForm() {
 	const { mutateAsync } = createRoom();
-	const createRoomForm = useForm<CreateRoomFormData>({
+	const createRoomForm = useForm<CreateRoomRequest>({
 		resolver: zodResolver(createRoomSchema),
 		defaultValues: {
 			name: "",
 			description: "",
 		},
 	});
-	async function handleCreateRoom(data: CreateRoomFormData) {
+	async function handleCreateRoom(data: CreateRoomRequest) {
 		await mutateAsync(data);
-		await createRoomForm.reset();
+		createRoomForm.reset();		
 	}
 	return (
 		<Card>
@@ -60,7 +60,7 @@ export function CreateRoomForm() {
 							name="description"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Nome da sala</FormLabel>
+									<FormLabel>Descrição da sala</FormLabel>
 									<FormControl>
 										<Textarea {...field} />
 									</FormControl>

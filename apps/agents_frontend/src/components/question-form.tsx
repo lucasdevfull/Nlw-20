@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -19,17 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateQuestion } from "@/hooks/questions";
-
-// Esquema de validação no mesmo arquivo conforme solicitado
-const createQuestionSchema = z.object({
-	question: z
-		.string()
-		.min(1, "Pergunta é obrigatória")
-		.min(10, "Pergunta deve ter pelo menos 10 caracteres")
-		.max(500, "Pergunta deve ter menos de 500 caracteres"),
-});
-
-type CreateQuestionFormData = z.infer<typeof createQuestionSchema>;
+import { CreateQuestionFormData } from "@/types/questions";
+import { createQuestionSchema } from "../../schema/questions";
 
 interface QuestionFormProps {
 	roomId: string;

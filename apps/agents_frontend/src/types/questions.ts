@@ -1,3 +1,6 @@
+import z from "zod";
+import { createQuestionSchema } from "../../schema/questions";
+
 export type CreateQuestionRequest = {
 	question: string;
 };
@@ -14,3 +17,5 @@ export type GetRoomQuestionsResponse = Array<{
 	createdAt: string;
 	isGeneratingAnswer?: boolean;
 }>;
+
+export type CreateQuestionFormData = z.infer<typeof createQuestionSchema>;

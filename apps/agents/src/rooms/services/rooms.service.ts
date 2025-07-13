@@ -6,8 +6,8 @@ import { CreateRoomDto } from 'src/dto/room.dto'
 export class RoomsService {
   constructor(private roomsRepository: RoomsRepository) {}
 
-  async getRooms() {
-    return await this.roomsRepository.getAll()
+  async getRooms(limit: number, page: number) {
+    return await this.roomsRepository.getAll(limit, page)
   }
 
   async createRoom(data: CreateRoomDto) {

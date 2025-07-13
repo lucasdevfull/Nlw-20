@@ -9,8 +9,9 @@ import { DRIZZLE } from 'src/infra/drizzle/drizzle.module'
 export class RoomsRepository {
   constructor(@Inject(DRIZZLE) private db: NodePgDatabase) {}
 
-  async getAll() {
-    const result = await this.db
+  async getAll(limit: number, page: number) {
+    const [{ total }] = await this.db.select({ total: count() }).from(rooms)
+    const data = await this.db
       .select({
         roomId: rooms.roomId,
         name: rooms.name,
@@ -21,7 +22,16 @@ export class RoomsRepository {
       .leftJoin(questions, eq(questions.roomId, rooms.roomId))
       .groupBy(rooms.roomId, rooms.name)
       .orderBy(rooms.createdAt)
-    return result
+      .limit(limit)
+      .offset((page - 1) * limit)
+    const totalPages = Math.ceil(total / limit)
+    return {
+      previusPage: page > 1 ? page - 1 : null,
+      nextPage: page < totalPages ? page + 1 : null,
+      page,
+      totalPages,
+      data,
+    }
   }
 
   async create(data: CreateRoomDto) {

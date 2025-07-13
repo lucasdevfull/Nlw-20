@@ -7,7 +7,13 @@ export type Room = {
   createdAt: Date
 }
 
-export type GetRooms = ApiResponse<Array<Room>>
+export type GetRooms = ApiResponse<{
+  previusPage: number | null
+  nextPage: number | null
+  page: number
+  totalPages: number
+  data: Array<Room>
+}>
 
 export type CreateRoom = ApiResponse<
   Omit<Room, 'name' | 'questionsCount' | 'createdAt'>

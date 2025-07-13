@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Get,
   HttpCode,
-  HttpStatus,
+  HttpException,
   Param,
+  ParseIntPipe,
   Post,
+  Query,
 } from '@nestjs/common'
 import { RoomsService } from '../services/rooms.service'
 import { CreateRoomDto } from 'src/dto/room.dto'
@@ -17,24 +20,35 @@ import type {
   CreateQuestionResponse,
   GetRoomQuestionsResponse,
 } from 'src/types/questions.types'
+import { HttpStatus } from '@common/http-status'
+import type { MultipartFile } from '@fastify/multipart'
+import { File } from '../rooms.decorators'
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino'
 
 @ApiTags('Rooms')
 @Controller('rooms')
 export class RoomsController {
   constructor(
+    @InjectPinoLogger(RoomsController.name)
+    private readonly logger: PinoLogger,
     private roomsService: RoomsService,
     private questionsService: QuestionsService
   ) {}
 
   @Get()
-  async getRooms(): Promise<GetRooms> {
-    const data = await this.roomsService.getRooms()
-    return { status: HttpStatus.OK, data }
+  async getRooms(
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number
+  ): Promise<GetRooms> {
+    this.logger.info('getRooms', { limit, page })
+    const result = await this.roomsService.getRooms(limit, page)
+    return { status: HttpStatus.OK, data: result }
   }
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async createRoom(@Body() body: CreateRoomDto): Promise<CreateRoom> {
+    this.logger.info('createRoom', { body })
     const { roomId } = await this.roomsService.createRoom(body)
     return { status: HttpStatus.CREATED, data: { roomId } }
   }
@@ -43,6 +57,7 @@ export class RoomsController {
   async getQuestions(
     @Param('roomId') roomId: string
   ): Promise<GetRoomQuestionsResponse> {
+    this.logger.info('getQuestions', { roomId })
     const data = await this.questionsService.getAllByRoom(roomId)
     return { status: HttpStatus.OK, data }
   }
@@ -53,10 +68,26 @@ export class RoomsController {
     @Param('roomId') roomId: string,
     @Body() body: CreateQuestionDto
   ): Promise<CreateQuestionResponse> {
+    this.logger.info('createQuestion', { roomId, body })
     const { questionId } = await this.questionsService.createQuestion({
       ...body,
       roomId,
     })
     return { status: HttpStatus.CREATED, data: { questionId } }
+  }
+
+  @Get(':roomId/audio')
+  async uploadAudio(
+    @Param('roomId') roomId: string,
+    @File() audio?: MultipartFile
+  ) {
+    this.logger.info('uploadAudio', { roomId })
+
+    if (!audio) {
+      throw new HttpException('Audio is required', HttpStatus.BAD_REQUEST)
+    }
+
+    const result = await this.questionsService.processAudio(audio, roomId)
+    return { status: HttpStatus.OK, data: result }
   }
 }

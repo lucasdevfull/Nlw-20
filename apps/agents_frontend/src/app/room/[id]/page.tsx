@@ -2,13 +2,10 @@
 import { QuestionForm } from "@/components/question-form";
 import { QuestionList } from "@/components/question-list";
 import { Button } from "@/components/ui/button";
+import type { RoomParams } from "@/types/rooms";
 import { ArrowLeft, Radio } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-
-type RoomParams = {
-	id: string;
-};
 
 export default function Room() {
 	const { id } = useParams<RoomParams>();

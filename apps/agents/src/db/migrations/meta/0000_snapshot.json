@@ -1,9 +1,64 @@
 {
-  "id": "e1205086-b420-42b4-b27b-3c8686882c4e",
+  "id": "9f06bf95-4364-4f89-a950-4d1d43a2c771",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.audio": {
+      "name": "audio",
+      "schema": "",
+      "columns": {
+        "audio_id": {
+          "name": "audio_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transcription": {
+          "name": "transcription",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "embeddings": {
+          "name": "embeddings",
+          "type": "vector(768)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "audio_room_id_rooms_room_id_fk": {
+          "name": "audio_room_id_rooms_room_id_fk",
+          "tableFrom": "audio",
+          "tableTo": "rooms",
+          "columnsFrom": ["room_id"],
+          "columnsTo": ["room_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.rooms": {
       "name": "rooms",
       "schema": "",
@@ -37,6 +92,61 @@
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.questions": {
+      "name": "questions",
+      "schema": "",
+      "columns": {
+        "question_id": {
+          "name": "question_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "room_id": {
+          "name": "room_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "question": {
+          "name": "question",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "answer": {
+          "name": "answer",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "questions_room_id_rooms_room_id_fk": {
+          "name": "questions_room_id_rooms_room_id_fk",
+          "tableFrom": "questions",
+          "tableTo": "rooms",
+          "columnsFrom": ["room_id"],
+          "columnsTo": ["room_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
