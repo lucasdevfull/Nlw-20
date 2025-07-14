@@ -12,20 +12,23 @@ import { Logger } from 'nestjs-pino'
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter()
   )
   app.useLogger(app.get(Logger))
-
-  patchNestJsSwagger()
-  const config = new DocumentBuilder()
-    .setTitle('Agents API')
-    .setDescription('The agents API description')
-    .setVersion('1.0')
-    .build()
-  const document = () => SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api', app, document)
+  if (env.NODE_ENV === 'dev') {
+    patchNestJsSwagger()
+    const config = new DocumentBuilder()
+      .setTitle('Agents API')
+      .setDescription('The agents API description')
+      .setVersion('1.0')
+      .build()
+    const document = () => SwaggerModule.createDocument(app, config)
+    SwaggerModule.setup('api', app, document)
+  }
+  
   //app.setGlobalPrefix('api')
   app.enableCors()
+  // @ts-expect-error
   app.register(fastifyMultipart, {
     attachFieldsToBody: true,
   })

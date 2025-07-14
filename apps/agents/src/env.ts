@@ -1,9 +1,12 @@
 import z from 'zod'
 
 const envSchema = z.object({
-  PORT: z.coerce.number().default(3000),
   DATABASE_URL: z.string(),
   GEMINI_API_KEY: z.string(),
+  NODE_ENV: z.enum(['dev', 'test', 'production']).default('dev'),
+  PORT: z.coerce.number().default(3000),
 })
 
-export const env = envSchema.parse(process.env)
+type Env = z.infer<typeof envSchema>
+
+export const env: Env = envSchema.parse(process.env)
