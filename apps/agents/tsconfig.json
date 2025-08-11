@@ -17,9 +17,18 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    //eu q fiz
+    
     "paths": {
-      "@common/*": ["./src/common/*"]
+      "@/*": ["src/*"],
+      "@common/*": ["src/common/*"],
+      "@db/*": ["src/db/*"],
+      "@dtos/*": ["src/dto/*"],
+      "@schema/*": ["src/schema/*"],
+      "@infra/*": ["src/infra/*"],
+      "@controller/*": ["src/rooms/controller/*"],
+      "@service/*": ["src/rooms/services/*"],
+      "@repository/*": ["src/rooms/repositories/*"]
     },
+    "resolveJsonModule": true
   }
 }

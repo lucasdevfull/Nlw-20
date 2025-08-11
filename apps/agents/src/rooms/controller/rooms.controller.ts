@@ -10,16 +10,16 @@ import {
   Post,
   Query,
 } from '@nestjs/common'
-import { RoomsService } from '../services/rooms.service'
-import { CreateRoomDto } from 'src/dto/room.dto'
-import { QuestionsService } from '../services/questions.service'
-import { CreateQuestionDto } from 'src/dto/questions.dto'
+import { RoomsService } from '@service/rooms.service'
+import { CreateRoomDto } from '@dtos/room.dto'
+import { QuestionsService } from '@service/questions.service'
+import { CreateQuestionDto } from '@dtos/questions.dto'
 import { ApiTags } from '@nestjs/swagger'
-import type { CreateRoomResponse, GetRoomsResponse } from 'src/types/room.types'
+import type { CreateRoomResponse, GetRoomsResponse } from '@/types/room.types'
 import type {
   CreateQuestionResponse,
   GetRoomQuestionsResponse,
-} from 'src/types/questions.types'
+} from '@/types/questions.types'
 import { HttpStatus } from '@common/http-status'
 import type { MultipartFile } from '@fastify/multipart'
 import { File } from '../rooms.decorators'

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { QuestionsRepository } from '../repositories/questions.repository'
-import type { CreateQuestion } from 'src/types/questions.types'
-import { GeminiService } from 'src/infra/gemini/gemini.service'
+import { QuestionsRepository } from '@repository/questions.repository'
+import type { CreateQuestion } from '@/types/questions.types'
+import { GeminiService } from '@infra/gemini/gemini.service'
 import type { MultipartFile } from '@fastify/multipart'
 
 @Injectable()

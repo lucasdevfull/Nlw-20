@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { count, eq } from 'drizzle-orm'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
-import { rooms, questions } from 'src/db/schema'
-import { CreateRoomDto } from 'src/dto/room.dto'
-import { DRIZZLE } from 'src/infra/drizzle/drizzle.module'
-import { CreateRoom } from 'src/types/room.types'
+import { rooms, questions } from '@db/schema'
+import { DRIZZLE } from '@infra/drizzle/drizzle.module'
+import { CreateRoom } from '@/types/room.types'
 
 @Injectable()
 export class RoomsRepository {

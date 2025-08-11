@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { RoomsController } from './controller/rooms.controller'
-import { RoomsRepository } from './repositories/rooms.repository'
-import { RoomsService } from './services/rooms.service'
-import { QuestionsService } from './services/questions.service'
-import { QuestionsRepository } from './repositories/questions.repository'
-import { GeminiModule } from 'src/infra/gemini/gemini.module'
+import { RoomsController } from '@controller/rooms.controller'
+import { RoomsRepository } from '@repository/rooms.repository'
+import { RoomsService } from '@service/rooms.service'
+import { QuestionsService } from '@service/questions.service'
+import { QuestionsRepository } from '@repository/questions.repository'
+import { GeminiModule } from '@infra/gemini/gemini.module'
 
 @Module({
   imports: [GeminiModule],

@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { NodePgDatabase } from 'drizzle-orm/node-postgres'
-import { audio, questions } from 'src/db/schema'
-import { DRIZZLE } from 'src/infra/drizzle/drizzle.module'
-import type { CreateQuestion } from 'src/types/questions.types'
+import { audio, questions } from '@db/schema'
+import { DRIZZLE } from '@infra/drizzle/drizzle.module'
+import type { CreateQuestion } from '@/types/questions.types'
 
 @Injectable()
 export class QuestionsRepository {
