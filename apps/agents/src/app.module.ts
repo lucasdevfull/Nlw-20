@@ -5,6 +5,7 @@ import { APP_PIPE } from '@nestjs/core'
 import { ZodValidationPipe } from 'nestjs-zod'
 import { GeminiModule } from './infra/gemini/gemini.module'
 import { LoggerModule } from 'nestjs-pino'
+import { env } from './env'
 
 @Module({
   imports: [
@@ -13,13 +14,16 @@ import { LoggerModule } from 'nestjs-pino'
     RoomsModule,
     LoggerModule.forRoot({
       pinoHttp: {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            colorize: true,
-            singleLine: true,
-          },
-        },
+        transport:
+          env.NODE_ENV === 'prod'
+            ? undefined
+            : {
+                target: 'pino-pretty',
+                options: {
+                  colorize: true,
+                  singleLine: true,
+                },
+              },
       },
     }),
   ],

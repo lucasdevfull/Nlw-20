@@ -13,8 +13,5 @@
   ],
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@fastify/static": "^8.2.0"
-  }
+  "license": "ISC"
 }

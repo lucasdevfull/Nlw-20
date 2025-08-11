@@ -12,7 +12,12 @@ import { Logger } from 'nestjs-pino'
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter()
+    new FastifyAdapter({
+      logger: false,
+    }),
+    {
+      bufferLogs: true,
+    }
   )
   app.useLogger(app.get(Logger))
   if (env.NODE_ENV === 'dev') {
@@ -25,7 +30,7 @@ async function bootstrap() {
     const document = () => SwaggerModule.createDocument(app, config)
     SwaggerModule.setup('api', app, document)
   }
-  
+
   //app.setGlobalPrefix('api')
   app.enableCors()
   // @ts-expect-error

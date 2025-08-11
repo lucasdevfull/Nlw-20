@@ -14,10 +14,10 @@ export const DRIZZLE = Symbol('drizzle')
         const pool = new Pool({
           connectionString: env.DATABASE_URL,
         })
-        return drizzle(pool, {
+        return drizzle<typeof schema, Pool>(pool, {
           schema,
           casing: 'snake_case',
-        }) as NodePgDatabase<typeof schema>
+        }) satisfies NodePgDatabase<typeof schema>
       },
     },
   ],

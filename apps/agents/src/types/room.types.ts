@@ -1,5 +1,10 @@
 import { ApiResponse } from './base'
 
+export type CreateRoom = {
+  name: string
+  description: string
+}
+
 export type Room = {
   roomId: string
   name: string
@@ -7,7 +12,7 @@ export type Room = {
   createdAt: Date
 }
 
-export type GetRooms = ApiResponse<{
+export type GetRoomsResponse = ApiResponse<{
   previusPage: number | null
   nextPage: number | null
   page: number
@@ -15,6 +20,6 @@ export type GetRooms = ApiResponse<{
   data: Array<Room>
 }>
 
-export type CreateRoom = ApiResponse<
+export type CreateRoomResponse = ApiResponse<
   Omit<Room, 'name' | 'questionsCount' | 'createdAt'>
 >

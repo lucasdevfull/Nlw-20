@@ -15,7 +15,7 @@ import { CreateRoomDto } from 'src/dto/room.dto'
 import { QuestionsService } from '../services/questions.service'
 import { CreateQuestionDto } from 'src/dto/questions.dto'
 import { ApiTags } from '@nestjs/swagger'
-import type { CreateRoom, GetRooms } from 'src/types/room.types'
+import type { CreateRoomResponse, GetRoomsResponse } from 'src/types/room.types'
 import type {
   CreateQuestionResponse,
   GetRoomQuestionsResponse,
@@ -39,7 +39,7 @@ export class RoomsController {
   async getRooms(
     @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number
-  ): Promise<GetRooms> {
+  ): Promise<GetRoomsResponse> {
     this.logger.info('getRooms', { limit, page })
     const result = await this.roomsService.getRooms(limit, page)
     return { status: HttpStatus.OK, data: result }
@@ -47,9 +47,14 @@ export class RoomsController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  async createRoom(@Body() body: CreateRoomDto): Promise<CreateRoom> {
-    this.logger.info('createRoom', { body })
-    const { roomId } = await this.roomsService.createRoom(body)
+  async createRoom(
+    @Body() { name, description }: CreateRoomDto
+  ): Promise<CreateRoomResponse> {
+    this.logger.info('createRoom', { name, description })
+    const { roomId } = await this.roomsService.createRoom({
+      name,
+      description,
+    })
     return { status: HttpStatus.CREATED, data: { roomId } }
   }
 
@@ -66,11 +71,11 @@ export class RoomsController {
   @Post(':roomId/questions')
   async createQuestion(
     @Param('roomId') roomId: string,
-    @Body() body: CreateQuestionDto
+    @Body() { question }: CreateQuestionDto
   ): Promise<CreateQuestionResponse> {
-    this.logger.info('createQuestion', { roomId, body })
+    this.logger.info('createQuestion', { roomId, question })
     const { questionId } = await this.questionsService.createQuestion({
-      ...body,
+      question,
       roomId,
     })
     return { status: HttpStatus.CREATED, data: { questionId } }
